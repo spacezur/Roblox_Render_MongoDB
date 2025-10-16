@@ -21,7 +21,7 @@ await client.connect();
 const db = client.db("RobloxGame");
 const players = db.collection("Players");
 
-// 🧩 Save player data
+// Save player data
 app.post("/save", async (req, res) => {
   try {
     const { userId, ...data } = req.body;
@@ -33,7 +33,7 @@ app.post("/save", async (req, res) => {
   }
 });
 
-// 🧩 Load player data
+// Load player data
 app.get("/load/:userId", async (req, res) => {
   try {
     const user = await players.findOne({ userId: parseInt(req.params.userId) });
@@ -43,7 +43,7 @@ app.get("/load/:userId", async (req, res) => {
   }
 });
 
-// 🧩 Export all data (optional admin route)
+// Export all data (optional admin route)
 app.get("/export", async (req, res) => {
   try {
     const allPlayers = await players.find({}).toArray();
