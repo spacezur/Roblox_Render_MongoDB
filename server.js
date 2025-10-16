@@ -24,9 +24,9 @@ const players = db.collection("Players");
 // Save player data
 app.post("/save", async (req, res) => {
   try {
-    const { userId, ...data } = req.body;
-    if (!userId) return res.status(400).json({ error: "Missing userId" });
-    await players.updateOne({ userId }, { $set: data }, { upsert: true });
+    const { userid, ...data } = req.body;
+    if (!userid) return res.status(400).json({ error: "Missing userid" });
+    await players.updateOne({ userid }, { $set: data }, { upsert: true });
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -34,9 +34,9 @@ app.post("/save", async (req, res) => {
 });
 
 // Load player data
-app.get("/load/:userId", async (req, res) => {
+app.get("/load/:userid", async (req, res) => {
   try {
-    const user = await players.findOne({ userId: parseInt(req.params.userId) });
+    const user = await players.findOne({ userid: parseInt(req.params.userid) });
     res.json(user || {});
   } catch (err) {
     res.status(500).json({ error: err.message });
