@@ -24,9 +24,9 @@ const players = db.collection(process.env.GAMES_COLLECTION_NAME);
 // Save player data
 app.post("/save", async (req, res) => {
   try {
-    const { userid, ...data } = req.body;
-    if (!userid) return res.status(400).json({ error: "Missing userid" });
-    await players.updateOne({ userid }, { $set: data }, { upsert: true });
+    const { _id, ...data } = req.body;
+    if (!_id) return res.status(400).json({ error: "Missing userid" });
+    await players.updateOne({ _id }, { $set: data }, { upsert: true });
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
