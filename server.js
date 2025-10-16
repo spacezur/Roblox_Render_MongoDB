@@ -12,6 +12,7 @@ const client = new MongoClient(uri);
 await client.connect();
 const db = client.db("DataStore");
 const players = db.collection("Players");
+const port = process.env.PORT || 3000;
 
 // Save player data
 app.post("/save", async (req, res) => {
@@ -32,5 +33,6 @@ app.get("/export", async (req, res) => {
   res.json(all);
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`✅ API running on port ${port}`));
+app.listen(port, () => {
+    console.log(`API running on port ${port}`)
+});
