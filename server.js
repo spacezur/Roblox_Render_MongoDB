@@ -1,38 +1,26 @@
-import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import { MongoClient } from "mongodb";
 
-const app = express();
-app.use(bodyParser.json());
-app.use(cors());
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = process.env.MONGODB_URI;
 
-const uri = process.env.MONGODB_URI; // from Render environment
-const client = new MongoClient(uri);
-await client.connect();
-const db = client.db("DataStore");
-const players = db.collection("Players");
-const port = process.env.PORT || 3000;
-
-// Save player data
-app.post("/save", async (req, res) => {
-  const { userId, ...data } = req.body;
-  await players.updateOne({ userId }, { $set: data }, { upsert: true });
-  res.json({ success: true });
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
 });
 
-// Load player data
-app.get("/load/:userId", async (req, res) => {
-  const user = await players.findOne({ userId: parseInt(req.params.userId) });
-  res.json(user || {});
-});
-
-// Export all players (optional admin endpoint)
-app.get("/export", async (req, res) => {
-  const all = await players.find({}).toArray();
-  res.json(all);
-});
-
-app.listen(port, () => {
-    console.log(`API running on port ${port}`)
-});
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);
