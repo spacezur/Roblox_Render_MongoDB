@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 
 const client = new MongoClient(process.env.MONGODB_URI);
 await client.connect();
-const db = client.db("RobloxGame");
+const db = client.db("DataStore");
 const players = db.collection("Players");
 
 // Save player data
