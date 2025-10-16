@@ -22,7 +22,7 @@ const db = client.db(process.env.DB_NAME);
 const players = db.collection(process.env.GAMES_COLLECTION_NAME);
 
 // Save player data
-app.post("/save", async (req, res) => {
+app.post("/", async (req, res) => {
   try {
     const { _id, ...data } = req.body;
     if (!_id) return res.status(400).json({ error: "Missing userid" });
@@ -34,9 +34,9 @@ app.post("/save", async (req, res) => {
 });
 
 // Load player data
-app.get("/load/:userid", async (req, res) => {
+app.get("/:_id", async (req, res) => {
   try {
-    const user = await players.findOne({ userid: parseInt(req.params.userid) });
+    const user = await players.findOne({ _id: parseInt(req.params._id) });
     res.json(user || {});
   } catch (err) {
     res.status(500).json({ error: err.message });
